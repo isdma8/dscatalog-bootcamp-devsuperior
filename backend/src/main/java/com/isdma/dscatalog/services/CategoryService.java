@@ -1,6 +1,7 @@
 package com.isdma.dscatalog.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.isdma.dscatalog.dto.CategoryDTO;
 import com.isdma.dscatalog.entities.Category;
 import com.isdma.dscatalog.repositories.CategoryRepository;
-import java.util.Optional;
+import com.isdma.dscatalog.services.exceptions.ResourceNotFoundException;
+
 
 @Service
 public class CategoryService {
@@ -42,7 +44,8 @@ public class CategoryService {
 		
 		Optional<Category> obj= repository.findById(id);
 		
-		Category cat = obj.get();
+		Category cat = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));//Em vez de colocar apenas get para buscar a category, eu pego esta função que me lança excepção caso seja nulo o objeto, assim crio uma excepção na minha entidade que as trata atraves de função lambda que neste caso nao retorna nada ()
+
 		
 		return new CategoryDTO(cat);
 	}
