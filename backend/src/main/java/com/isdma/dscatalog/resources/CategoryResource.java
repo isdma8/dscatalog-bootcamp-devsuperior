@@ -1,6 +1,5 @@
 package com.isdma.dscatalog.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.isdma.dscatalog.entities.Category;
+import com.isdma.dscatalog.dto.CategoryDTO;
 import com.isdma.dscatalog.services.CategoryService;
 
 //O nosso recourse implementa o controller Rest, é a nossa API(Application programming interface) do nosso backend
@@ -24,9 +23,9 @@ public class CategoryResource {
 	private CategoryService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Category>> findAll(){
+	public ResponseEntity<List<CategoryDTO>> findAll(){
 		
-		List<Category> list = service.findAll();
+		List<CategoryDTO> list = service.findAll();
 		
 		/*List<Category> list = new ArrayList<>();
 		list.add(new Category(1L,"Books"));  
