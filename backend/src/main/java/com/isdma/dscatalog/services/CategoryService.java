@@ -1,8 +1,5 @@
 package com.isdma.dscatalog.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.isdma.dscatalog.dto.CategoryDTO;
 import com.isdma.dscatalog.entities.Category;
 import com.isdma.dscatalog.repositories.CategoryRepository;
-import com.sun.el.stream.Stream;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -38,6 +35,16 @@ public class CategoryService {
 		
 		return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
 		
+	}
+
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id) {
+		
+		Optional<Category> obj= repository.findById(id);
+		
+		Category cat = obj.get();
+		
+		return new CategoryDTO(cat);
 	}
 	
 
