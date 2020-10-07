@@ -49,6 +49,16 @@ public class CategoryService {
 		
 		return new CategoryDTO(cat);
 	}
-	
+
+	@Transactional
+	public CategoryDTO insert(CategoryDTO dto) {
+		Category cat = new Category();
+		cat.setName(dto.getName());
+
+		cat = repository.save(cat); //retorna o cat inserido, neste caso muda que fica ja com id
+		
+		return new CategoryDTO(cat);
+	}
+
 
 }
