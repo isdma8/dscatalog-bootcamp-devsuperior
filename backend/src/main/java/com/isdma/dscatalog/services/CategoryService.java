@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,21 @@ public class CategoryService {
 		cat = repository.save(cat); //retorna o cat inserido, neste caso muda que fica ja com id
 		
 		return new CategoryDTO(cat);
+	}
+
+	@Transactional
+	public CategoryDTO update(Long id, CategoryDTO dto) {
+		try {
+		Category entity = repository.getOne(id); //a diferença para o findbyid é que ele nao vai no banco de dados, ele instancia um objeto provisorio com esse id
+		entity.setName(dto.getName()); //atualizei os dados da entidade que está so na memoria 
+		
+		entity = repository.save(entity); //agora sim acedemos para salvar, pode dar excepção porque pode nao existir o id entao fazemos um try catch
+		
+		return new CategoryDTO(entity);
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id Not Found: " + id);//Caso nao encontre lançamos a nossa excepção personalizada
+		}
 	}
 
 
