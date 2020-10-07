@@ -1,11 +1,15 @@
 package com.isdma.dscatalog.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +21,11 @@ public class Category implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //para dizer que iremos usar o UTC para o tempo, ou se nao especificarmos o timezone, -3 etc entao será UTC
+	private Instant createdAt; //para efeitos de Log
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant updatedAt;
 	
 	public Category() {
 		
@@ -43,7 +52,35 @@ public class Category implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/*public void setCreatedAt(Instant createdAt) { //NAO FAZ SENTIDO TER NESTES CASOS
+		this.createdAt = createdAt;
+	}*/
 
+	/*
+	public void setUpdatedAt(Instant updatedAt) {
+		this.updatedAt = updatedAt;
+	}*/
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+	
+	public Instant getUpdatedAt() {
+		return updatedAt;
+	}
+	
+	//Metodo auxiliar para ele saber onde gravar, porque sempre que criar uma categoria sera CreatedAt e se for atualizar sera updatedAt
+	@PrePersist
+	public void prePersist() {//esse nome porque é feito antes de precistir, antes de salvar
+		createdAt = Instant.now();
+	}
+	
+	@PreUpdate   //com isto o JPA faz isto antes de gravar caso seja nova a de cima, caso seja update a de baixo antes de gravar e fica automatizado
+	public void preUpdate() {
+		updatedAt = Instant.now();
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
