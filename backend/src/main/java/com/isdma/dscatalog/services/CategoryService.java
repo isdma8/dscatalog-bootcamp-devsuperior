@@ -1,6 +1,5 @@
 package com.isdma.dscatalog.services;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -9,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +25,12 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository repository;
 
-	@Transactional(readOnly = true) // garanto que metodo executa transacção com banco de dados e abre e fecha
+	//@Transactional(readOnly = true) // garanto que metodo executa transacção com banco de dados e abre e fecha
 									// transação quando deve e alem disso nao travo o bando de dados so para ler
 									// dados com o readonly=true
-	public List<CategoryDTO> findAll() {
+	//public List<CategoryDTO> findAll() {
 
-		List<Category> list = repository.findAll();
+		//List<Category> list = repository.findAll();
 
 		/*
 		 * List<CategoryDTO> listdto = new ArrayList<>();
@@ -44,9 +45,19 @@ public class CategoryService {
 		// List<CategoryDTO> listdto = list.stream().map(x -> new
 		// CategoryDTO(x)).collect(Collectors.toList());
 
-		return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+		//return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
 
+	//}
+	
+	@Transactional(readOnly = true)
+	public Page<CategoryDTO> findAllPaged(PageRequest pagerequest) {
+		Page<Category> list = repository.findAll(pagerequest);
+		
+		//no caso o page já é um stream entao ja nem precisamos chamar o stream e converter de novo no fim como no findall
+		return list.map(x -> new CategoryDTO(x));
+		
 	}
+	
 
 	@Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
