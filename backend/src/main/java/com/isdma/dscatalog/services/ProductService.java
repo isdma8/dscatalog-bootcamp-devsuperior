@@ -12,8 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.isdma.dscatalog.dto.CategoryDTO;
 import com.isdma.dscatalog.dto.ProductDTO;
+import com.isdma.dscatalog.entities.Category;
 import com.isdma.dscatalog.entities.Product;
+import com.isdma.dscatalog.repositories.CategoryRepository;
 import com.isdma.dscatalog.repositories.ProductRepository;
 import com.isdma.dscatalog.services.exceptions.DatabaseException;
 import com.isdma.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -23,6 +26,9 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository repository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	//@Transactional(readOnly = true) // garanto que metodo executa transacção com banco de dados e abre e fecha
 									// transação quando deve e alem disso nao travo o bando de dados so para ler
@@ -86,11 +92,15 @@ public class ProductService {
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
 		//cat.setName(dto.getName());
+		
+		//Como é igual no insert e no update vamos fazer um metodo auxiliar que faz o mesmo transformar o ProductDTO no product
+		copyDtoToEntity(dto, entity);
 
 		entity = repository.save(entity); // retorna o cat inserido, neste caso muda que fica ja com id
 
 		return new ProductDTO(entity);
 	}
+
 
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
@@ -98,7 +108,9 @@ public class ProductService {
 			Product entity = repository.getOne(id); // a diferença para o findbyid é que ele nao vai no banco de dados,
 														// ele instancia um objeto provisorio com esse id
 			//entity.setName(dto.getName()); // atualizei os dados da entidade que está so na memoria
-
+			
+			copyDtoToEntity(dto, entity);
+			
 			entity = repository.save(entity); // agora sim acedemos para salvar, pode dar excepção porque pode nao
 												// existir o id entao fazemos um try catch
 
@@ -124,4 +136,19 @@ public class ProductService {
 		}
 	}
 
+	
+	private void copyDtoToEntity(ProductDTO dto, Product entity) {
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setPrice(dto.getPrice());
+		entity.setImgUrl(dto.getImgUrl());
+		entity.setDate(dto.getDate());
+
+		entity.getCategories().clear(); //limpar porque porventura pode ter alguma ainda
+		for(CategoryDTO catDto : dto.getCategories()) {
+			Category category = categoryRepository.getOne(catDto.getId());
+			entity.getCategories().add(category);
+		}
+	}
+	
 }
