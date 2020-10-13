@@ -1,0 +1,35 @@
+.main-nav{
+    height: 70px;
+    color: #fff;
+    align-items: center;
+    padding-left: 40px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.nav-logo-text{
+    color: #fff;
+}
+
+.main-menu{
+    display: flex;
+    font-size: 18px;
+    width: 380px;
+    justify-content: space-between; //dar espaço entre os li do menu    
+
+    a{
+        font-style: normal; //para tirar o sublinhado do link
+        color: rgba(255, 255, 255, 0.5);
+
+        &.active{ //dentro da tag a a class active que existir por isso usamos o &
+            font-weight: bold;
+            color: #FFF;
+
+        }
+
+        &:hover{//quando tiver a pssar o rato por la
+            color: #FFF;
+        }
+    }
+
+}
