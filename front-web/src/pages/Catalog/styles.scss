@@ -1,0 +1,20 @@
+.catalog-container{
+    margin-top: 26px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.catalog-title{
+    font-size: 24px;
+    line-height: 33px;
+    letter-spacing: -0.015em;
+}   
+
+.catalog-products{
+    margin-top: 43px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px); //250px 250px nao faz sentido fazer à mao entao usamos o repeat, que espaça da melhor forma, tambem existe o auto-fit mas nao tem comportamenteo que queremos
+    grid-gap: 33px 20px; //distancia entre produtos para o lado e para cima quando der ele faz
+    justify-content: space-between;//para produtos ficarem espaçados
+
+}
