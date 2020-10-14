@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import './styles.scss';
 import {ReactComponent as ArrowIcon} from '../../../../core/assets/images/arrow.svg'
 import {ReactComponent as ProductImage} from '../../../../core/assets/images/product.svg' 
 import ProductPrice from '../../../../core/components/ProductPrice';
+import { makeRequest } from '../../../../core/utils/request';
+import { Product } from '../../../../core/types/Product';
 
 type ParamsType = {
     productId: string;
@@ -19,6 +21,13 @@ const ProductDetails= () => {
 
     //console.log(productId);
 
+    const [product, setProduct] = useState<Product>();
+
+    useEffect(()=> {
+        makeRequest({url: `/products/${productId}`})
+        .then(response => setProduct(response.data)) //depois de fazer a linha acima eu quero popular um estado criado acima
+    }, [productId]);//todas as variaveis que usamos no useeffect temos de o deixar aqui como dependencia tambem
+
     return(
         <div className="product-details-container">
             <div className="card-base border-radius-20 product-details">
@@ -32,9 +41,9 @@ const ProductDetails= () => {
                             <ProductImage className="products-detail-image" />
                         </div>
                         <h1 className="product-details-name">
-                            Computador Desktop - Intel Core i7
+                            {product?.name}
                         </h1>
-                        <ProductPrice price="3.779,00"/>
+                        {product?.price && <ProductPrice price={product?.price}/>}
                     </div>
                     <div className="col-6 product-details-card">
                         <h1 className="product-descrition-title">

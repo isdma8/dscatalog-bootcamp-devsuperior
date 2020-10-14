@@ -17,3 +17,9 @@
     letter-spacing: -0.015em;
     color: #263238;//metendo aqui a cor o componente link por defeito que mudava de cor ao passar o carro deixa de fazer efeito
 }
+
+.product-card-image{
+    //width: 100%; //o maior tamanho da imagem assim vai ser a do container onde ela esta   
+    width: 160px;
+    height: 160px;
+}   
