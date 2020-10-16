@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from './components/ProductCard';
 import './styles.scss';
 import { Link } from 'react-router-dom';
-import { makeRequest } from '../../core/utils/request';
-import { ProductssResponse } from '../../core/types/Product';
+import { makeRequest } from 'core/utils/request';
+import { ProductssResponse } from 'core/types/Product';
+import ProductCardLoader from './components/Loaders/ProductCardLoader';
 
 const Catalog = () => {
     //A logica colocamos antes de retorno
@@ -12,6 +13,8 @@ const Catalog = () => {
     //e listar os produtos dinamicamente
     const [productsResponse, setProductsResponse] = useState<ProductssResponse>(); //tipo do estado é um ProductResponse como nos criamos em Product
 //crio um estado e armazeno tudo o que chega desse estado setProductsResponse na variavel productsResponse
+
+    const [isLoading, setIsLoading] = useState(false); //por padrao usestate nao aparece entao colocamos false
 
     //as chamadas de API ficam dentro do useeffect porque o componente pode ser renderizado muitas vezes para qualquer pequena coisa que mudar
     //e cada vez que o fizesse se colocassemos aqui solto ia fazer uma chamada nova
@@ -37,9 +40,14 @@ const Catalog = () => {
             linesPerPage: 12 //12 por padrão
         }
 
-
+        //Antes de começar requisição inicio o loader
+        setIsLoading(true);
         makeRequest({url: '/products', params})
-            .then(response => setProductsResponse(response.data));
+            .then(response => setProductsResponse(response.data))
+            .finally(() => {//executado sempre depois de carregar os dados este finally se o chamarmos
+                //entao aqui finalizamos o loader
+                setIsLoading(false);
+            })
 
 
     }, []); //1º argumento é uma função onde vamos fazer algo e o segundo uma lista de dependencias que se estiver vazia
@@ -52,11 +60,13 @@ const Catalog = () => {
     </h1>
 
     <div className="catalog-products">
-        {productsResponse?.content.map(product => ( //iteração sobre elementos usando o map
-            <Link to={`/products/${product.id}`} key={product.id}>
-                <ProductCard product={product}/></Link>
+        {isLoading ? <ProductCardLoader /> : ( //caso isloading chamamos o loader caso nao chamamos os dados
+            productsResponse?.content.map(product => ( //iteração sobre elementos usando o map
+                <Link to={`/products/${product.id}`} key={product.id}>
+                    <ProductCard product={product}/></Link>
+                ))
 
-        ))}
+        )}
     </div>
     </div>
 
