@@ -3,18 +3,21 @@ import ProductCard from './components/ProductCard';
 import './styles.scss';
 import { Link } from 'react-router-dom';
 import { makeRequest } from 'core/utils/request';
-import { ProductssResponse } from 'core/types/Product';
+import { ProductsResponse } from 'core/types/Product';
 import ProductCardLoader from './components/Loaders/ProductCardLoader';
+import Pagination from 'core/components/Pagination';
 
 const Catalog = () => {
     //A logica colocamos antes de retorno
     //Antes do componente iniciar, buscar a lista de produtos
     //Quando a lista de produtos estiver disponivel, popular um estado no componente 
     //e listar os produtos dinamicamente
-    const [productsResponse, setProductsResponse] = useState<ProductssResponse>(); //tipo do estado é um ProductResponse como nos criamos em Product
+    const [productsResponse, setProductsResponse] = useState<ProductsResponse>(); //tipo do estado é um ProductResponse como nos criamos em Product
 //crio um estado e armazeno tudo o que chega desse estado setProductsResponse na variavel productsResponse
 
     const [isLoading, setIsLoading] = useState(false); //por padrao usestate nao aparece entao colocamos false
+
+    const [activePage, setActivePage] = useState(0);
 
     //as chamadas de API ficam dentro do useeffect porque o componente pode ser renderizado muitas vezes para qualquer pequena coisa que mudar
     //e cada vez que o fizesse se colocassemos aqui solto ia fazer uma chamada nova
@@ -36,7 +39,7 @@ const Catalog = () => {
         // .then(response => console.log(response));
 
         const params = { //criar objeto
-            page: 0,
+            page: activePage,
             linesPerPage: 12 //12 por padrão
         }
 
@@ -50,8 +53,8 @@ const Catalog = () => {
             })
 
 
-    }, []); //1º argumento é uma função onde vamos fazer algo e o segundo uma lista de dependencias que se estiver vazia
-    //significa que está aguardar para faazer alguma coisa assim que o componente iniciar
+    }, [activePage]); //1º argumento é uma função onde vamos fazer algo e o segundo uma lista de dependencias que se estiver vazia
+    //significa que está aguardar para faazer alguma coisa assim que o componente iniciar, se tiver variaveis temos de as meter porque precisa delas cada vez que renderiza
         //<Link to="/products/1"><ProductCard /></Link> assim era estatico
     return(
     <div className="catalog-container">
@@ -68,10 +71,18 @@ const Catalog = () => {
 
         )}
     </div>
+            {productsResponse && ( 
+            <Pagination 
+                totalPages={productsResponse.totalPages} 
+                activePage={activePage}
+                onChange={page => setActivePage(page)}
+            />
+            )}  
+            
     </div>
 
     );
-
+                
 };
 
 

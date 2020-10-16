@@ -1,0 +1,54 @@
+.pagination-container{
+    display: flex;
+    justify-content: center;
+    //height: 40px; //elemento filho ja pressiona a que seja assim
+    //border: 1px solid #000;
+    align-items: center;
+    margin-top: 35px;
+}
+
+.pagination-item{
+    width: 40px;
+    height: 40px;
+    background: #E1E1E1;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 25px;
+    /* identical to box height */
+    //text-align: center;
+    letter-spacing: -0.015em;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; //aparencia de um link
+    margin-right: 10px;
+
+    &.active{ //regra para quando este mesmo elemento .pagination-item tiver a classe .active fazer isto
+        background: #407BFF;
+    }
+}
+
+.pagination-previous{
+    transform: rotate(-180deg);
+    margin-right: 25px;
+    //cursor: pointer;//para rato ficar com mao no link
+}
+
+.pagination-next{
+    margin-left: 15px; //era 25 mas os items das bolas ja tem um margin right 10
+    cursor: pointer;
+}
+
+.page-active{
+    cursor: pointer;
+    color: #407BFF;
+
+}
+
+.page-inactive{
+    color: #e1e1e1;
+    pointer-events: none; //desabilita qualquer interação de clique com o rato
+
+}

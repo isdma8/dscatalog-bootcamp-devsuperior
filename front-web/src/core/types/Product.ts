@@ -1,6 +1,6 @@
-export type ProductssResponse={
+export type ProductsResponse={
     content: Product[];
-    tatalPages: number;
+    totalPages: number;
 }
 export type Product ={
     id: number;
