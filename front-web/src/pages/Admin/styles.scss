@@ -1,0 +1,9 @@
+.admin-container{
+
+    display:flex;
+}
+
+.admin-content{
+    padding: 25px 40px 45px 40px;
+    flex: 1; //para ele ocupar toda a àrea e não apenas quando tem texto ou assim, com isto fica logo a ocupar o tamanho todo dado ao conteudo
+}
