@@ -4,14 +4,22 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import com.isdma.dscatalog.entities.User;
 
 public class UserDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
+	@NotBlank(message= "Campo obrigatório") //Melhor o noblank que o notempty poruqe este ve mesmo que o user tenha metido espaços em branco no campo a inserir
 	private String firstName;
 	private String lastName;
+	
+	@Email(message = "Por favor inserir um email válido")
 	private String email;
 	//private String password; Nao queremos a passaword a transitar
 	

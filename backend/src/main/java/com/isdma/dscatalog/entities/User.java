@@ -26,7 +26,7 @@ public class User implements Serializable{
 	private String firstName;
 	private String lastName;
 	
-	@Column(unique = true) //agora vai dar erro se tentar inserir email igual
+	@Column(unique = true) //agora vai dar erro se tentar inserir email igual, manda erro 500
 	private String email;
 	private String password;  
 	
