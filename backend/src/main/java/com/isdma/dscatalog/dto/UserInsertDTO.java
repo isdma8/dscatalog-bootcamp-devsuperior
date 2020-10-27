@@ -1,5 +1,8 @@
 package com.isdma.dscatalog.dto;
 
+import com.isdma.dscatalog.services.validation.UserInsertValid;
+
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {//herança de UserDTO, ou seja vai ter tudo o que tem o UserDTO
 	private static final long serialVersionUID = 1L; 
 
