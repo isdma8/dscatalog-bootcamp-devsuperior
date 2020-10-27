@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,12 +25,14 @@ public class User implements Serializable{
 	private Long id;
 	private String firstName;
 	private String lastName;
+	
+	@Column(unique = true) //agora vai dar erro se tentar inserir email igual
 	private String email;
-	private String password;
+	private String password;  
 	
 
 	//Relação direcionada, o user conhece muitos Roles, mas os roles podem fazer parte de varios users, um admin pode ter varios users entao temos muitos para muitos e quando sao muitos para muitos temos a tabela auxiliar que criamos agora aqui como fizemos em user
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER) // Este parametro fetch obriga a que sempre que formos buscar um user ja vem pendurado nele os seus roles, isto porque sao poucos neste caso e iremos precisar deles junto com o user
 	@JoinTable(name="tb_user_role",
 	joinColumns = @JoinColumn(name = "user_id"),
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -44,7 +48,7 @@ public class User implements Serializable{
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.password = password;
+		this.password = password;	
 	}
 
 	public Long getId() {
