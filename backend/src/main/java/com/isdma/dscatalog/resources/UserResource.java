@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.isdma.dscatalog.dto.UserDTO;
 import com.isdma.dscatalog.dto.UserInsertDTO;
+import com.isdma.dscatalog.dto.UserUpdateDTO;
 import com.isdma.dscatalog.services.UserService;
 
 //O nosso recourse implementa o controller Rest, é a nossa API(Application programming interface) do nosso backend
@@ -90,10 +91,10 @@ public class UserResource {
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO dto) {
-		dto = service.update(id, dto);
+	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
+		UserDTO newdto = service.update(id, dto);
 
-		return ResponseEntity.ok().body(dto);
+		return ResponseEntity.ok().body(newdto);
 
 	}
 

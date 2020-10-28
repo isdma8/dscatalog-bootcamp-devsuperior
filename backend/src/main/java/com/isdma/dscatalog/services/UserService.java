@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.isdma.dscatalog.dto.RoleDTO;
 import com.isdma.dscatalog.dto.UserDTO;
 import com.isdma.dscatalog.dto.UserInsertDTO;
+import com.isdma.dscatalog.dto.UserUpdateDTO;
 import com.isdma.dscatalog.entities.Role;
 import com.isdma.dscatalog.entities.User;
 import com.isdma.dscatalog.repositories.RoleRepository;
@@ -86,7 +87,7 @@ public class UserService {
 
 
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(Long id, UserUpdateDTO dto) {
 		try {
 			User entity = repository.getOne(id); // a diferença para o findbyid é que ele nao vai no banco de dados,
 														// ele instancia um objeto provisorio com esse id
