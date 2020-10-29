@@ -1,5 +1,7 @@
 package com.isdma.dscatalog.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +12,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import com.isdma.dscatalog.components.JwtTokenEnhancer;
 
 @Configuration
 @EnableAuthorizationServer
@@ -39,6 +45,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
+	private JwtTokenEnhancer tokenEnhancer; //para adicionarmos coisas ao token injetamos a classe criada
+	
+	
 	//Aqui temos os 4 beans que precisamos e que criamos na classe AppConfig e websecurityconfig
 	
 	@Override
@@ -58,10 +68,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		
+		TokenEnhancerChain chain = new TokenEnhancerChain();
+		chain.setTokenEnhancers(Arrays.asList(accessTokenConverter, tokenEnhancer)); //espera uma lista para podermos passar o token passamos tmabem o accesstokenconveter
+		
 		//Aqui colocamos quem vai autorizar e qual o formato do tokin
 		endpoints.authenticationManager(authenticationManager) //vai ser o bean que criei
 		.tokenStore(tokenStore) //vai ser o bean que injetamos tambem
-		.accessTokenConverter(accessTokenConverter);//outro que definimos 
+		.accessTokenConverter(accessTokenConverter)//outro que definimos 
+		.tokenEnhancer(chain); //assim passamos as nossas adições ao header do token
 	}
 
 	
