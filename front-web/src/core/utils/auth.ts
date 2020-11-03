@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode';
+
 export const CLIENT_ID = 'dscatalog'; //variaveis para usar em toda a aplicação colocamos tudo uppercase
 export const CLIENT_SECRET = 'dscatalog123';
 
@@ -8,6 +10,14 @@ type LoginResponse = {
     scope: string;
     userFirstName: string;
     userId: number;
+}
+
+export type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';
+
+type AccessToken = {
+    exp: number,
+    user_name: string,
+    authorities: Role[]  //lista de roles que criamos acima
 }
 
 export const saveSessionData = (loginResponse: LoginResponse) => {
@@ -22,3 +32,46 @@ export const getSessionData = () => {
 
     return parsedSessionData as LoginResponse; //dizemos para confiar em nos e retorna lo como o tipo LoginResponse senao ia retornar como any e no typscript sem tipo nao conseguimos aceder aos campos deste objeto
 }                                               //eu seu que o que ta no locastorage segue este formato de dados LoginResponse
+
+
+export const getAccessTokenDecoded = () => { //retornar access token descodificado
+    const sessionData = getSessionData();
+
+    const tokenDecoded = jwtDecode(sessionData.access_token); //retorna um any ou unknown entao temos de fazer um type casting
+    return tokenDecoded as AccessToken;
+}
+
+export const isTokenValid = () => {
+    const { exp } = getAccessTokenDecoded(); //fazer assim é mais simples de aceder por fazes, chama-se Destruct
+
+    //if(Date.now() <= exp*1000){ //multiplico por 1000 porque o exp vem em segundos e o Date.now é os milisegundos desde 1/1/1970 entao convertemos multiolicando por 1000
+    //    return true;
+    //}
+
+    //return false;
+    return Date.now() <= exp*1000; 
+}
+
+export const isAuthenticated = () => {
+        //SABER SE ESTÀ AUTENTICADO
+        //"authData" tem de estar no localstorage
+        //access_token nao pode estar expirado
+
+        const sessionData = getSessionData();
+
+        return sessionData.access_token && isTokenValid();
+
+}
+
+
+export const isAllowedByRole = (routeRoles: Role[] = []) => { //recebemos uma lista de role e o valor padrao é inicializado isto porque como este valor é opcional ia dar erro na chamada do metodo a dizer que o valor podia ser null e nao pode
+
+    if(routeRoles.length === 0){ //se nao especifiquei nenhuma role é porque pode ver o link
+        return true;
+    }
+
+    const userToken = getAccessTokenDecoded();
+    const userRoles = userToken.authorities;
+
+    return routeRoles.some(role => userRoles.includes(role)); //em vez de ser role === 'ROLE_ADMIN' ou isso, como sao varias, vamos testando cada uma existe no userRole e ao mesmo tempo ele ve se essa Role existe no routeRoles
+}

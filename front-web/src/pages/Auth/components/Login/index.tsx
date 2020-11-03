@@ -1,6 +1,6 @@
 import ButtonIcon from 'core/components/ButtonIcon';
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';   
 
 import AuthCard from '../Card';
@@ -13,6 +13,10 @@ type FormData = {
     password: string;
 }
 
+type LocationState = {
+    from: string;
+}
+
 
 const Login = () => {
 
@@ -22,6 +26,10 @@ const Login = () => {
 
     const history = useHistory();
 
+    const location = useLocation<LocationState>();
+
+    const { from } = location.state || { from: { pathname: "/admin" } }; //caso nao existe a rota para onde o user queria ir redireciono para admin
+
     const onSubmit = (data: FormData) => {
         console.log(data);
 
@@ -29,7 +37,8 @@ const Login = () => {
         .then(response => {
             setHasError(false);
             saveSessionData(response.data);
-            history.push('/admin');
+            //history.push('/admin');
+            history.replace(from); //para ele trocar na pilha de endereços o endereço usado para o auth pelo link que o user tava antes de querer ir para este link onde precisou de fazer login, assim que fizer retroceder nao vai para a pagina login mas para a pagina onde tava antes
         })
         .catch(() => {
             setHasError(true);
