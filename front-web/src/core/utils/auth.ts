@@ -37,8 +37,13 @@ export const getSessionData = () => {
 export const getAccessTokenDecoded = () => { //retornar access token descodificado
     const sessionData = getSessionData();
 
-    const tokenDecoded = jwtDecode(sessionData.access_token); //retorna um any ou unknown entao temos de fazer um type casting
-    return tokenDecoded as AccessToken;
+    try{
+        const tokenDecoded = jwtDecode(sessionData.access_token); //retorna um any ou unknown entao temos de fazer um type casting
+        return tokenDecoded as AccessToken;
+    }
+    catch(error){
+        return {} as AccessToken; //retornamos objeto vazio para nosso fluxo nao quebrar
+    }
 }
 
 export const isTokenValid = () => {
@@ -73,5 +78,5 @@ export const isAllowedByRole = (routeRoles: Role[] = []) => { //recebemos uma li
     const userToken = getAccessTokenDecoded();
     const userRoles = userToken.authorities;
 
-    return routeRoles.some(role => userRoles.includes(role)); //em vez de ser role === 'ROLE_ADMIN' ou isso, como sao varias, vamos testando cada uma existe no userRole e ao mesmo tempo ele ve se essa Role existe no routeRoles
+    return routeRoles.some(role => userRoles?.includes(role)); //em vez de ser role === 'ROLE_ADMIN' ou isso, como sao varias, vamos testando cada uma existe no userRole e ao mesmo tempo ele ve se essa Role existe no routeRoles
 }

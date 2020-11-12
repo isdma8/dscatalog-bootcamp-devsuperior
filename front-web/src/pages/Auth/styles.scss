@@ -2,6 +2,9 @@
     display: flex;
     padding: 40px 40px 100px 0;
     justify-content: center;
+    background: url(~core/assets/images/auth-background.svg) no-repeat;//o til so serve no css para nao andarmos a meter o caminho com ../../ etc
+                                                              //no-repeat para nao se repetir a imagem
+    background-size: 100%; //assim a imagem ira ocupar 100% do tamanho que puder no container
 }
 
 
