@@ -1,7 +1,6 @@
 import axios, {Method} from 'axios';
 import qs from 'qs';
-import { CLIENT_ID, CLIENT_SECRET, getSessionData } from './auth';
-import history from './history';
+import { CLIENT_ID, CLIENT_SECRET, getSessionData, logout } from './auth';
 
 type RequestParams = {
     method?: Method; //é um tipo vindo do axios e definido por nos, define se é get, post, put etc
@@ -28,8 +27,9 @@ axios.interceptors.response.use(function (response) { //intercepta as requisiç�
     // Do something with respon se error
 
     if(error.response.status === 401){
-        console.log('redirecionar o usuário para o login');
-        history.push('/admin/auth/login');
+        //console.log('redirecionar o usuário para o login');
+        //history.push('/auth/login');
+        logout(); //melhor assim remove logo o token pelo sim pelo nao se der algum tipo de erro
     }
 
     return Promise.reject(error);

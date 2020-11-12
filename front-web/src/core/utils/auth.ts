@@ -1,5 +1,7 @@
 import jwtDecode from 'jwt-decode';
 
+import history from './history';
+
 export const CLIENT_ID = 'dscatalog'; //variaveis para usar em toda a aplicação colocamos tudo uppercase
 export const CLIENT_SECRET = 'dscatalog123';
 
@@ -79,4 +81,11 @@ export const isAllowedByRole = (routeRoles: Role[] = []) => { //recebemos uma li
     const userRoles = userToken.authorities;
 
     return routeRoles.some(role => userRoles?.includes(role)); //em vez de ser role === 'ROLE_ADMIN' ou isso, como sao varias, vamos testando cada uma existe no userRole e ao mesmo tempo ele ve se essa Role existe no routeRoles
+}
+
+
+export const logout = () => {
+
+    localStorage.removeItem('authData');
+    history.replace('/auth/login');
 }

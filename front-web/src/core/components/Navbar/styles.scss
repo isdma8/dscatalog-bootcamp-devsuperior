@@ -3,6 +3,7 @@
     color: #fff;
     align-items: center;
     padding-left: 40px;
+    padding-right: 40px;
     margin-left: 0;
     margin-right: 0;
 }
@@ -13,23 +14,30 @@
 
 .main-menu{
     display: flex;
-    font-size: 18px;
-    width: 380px;
-    justify-content: space-between; //dar espaço entre os li do menu    
+    
+    //justify-content: space-between; //dar espaço entre os li do menu    
+    justify-content: center;
 
-    a{
-        font-style: normal; //para tirar o sublinhado do link
-        color: rgba(255, 255, 255, 0.5);
-
-        &.active{ //dentro da tag a a class active que existir por isso usamos o &
-            font-weight: bold;
-            color: #FFF;
-
-        }
-
-        &:hover{//quando tiver a pssar o rato por la
-            color: #FFF;
-        }
+    li:nth-child(2){ //pseudo seletor para conseguir pegar a 2º li onde eu coloco logo margin right e left e assim ja nao mecho nos outros
+        margin-right: 85px;
+        margin-left:85px;
     }
 
+}
+
+.nav-link{
+    font-style: normal; //para tirar o sublinhado do link
+
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.5);
+
+    &.active{ //dentro da tag a a class active que existir por isso usamos o &
+        font-weight: bold;
+        color: #FFF;
+
+    }
+
+    &:hover{//quando tiver a pssar o rato por la
+        color: #FFF;
+    }
 }
