@@ -1,5 +1,7 @@
 package com.isdma.dscatalog.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -55,8 +57,9 @@ public class ProductService {
 	//}
 	
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(PageRequest pagerequest) {
-		Page<Product> list = repository.findAll(pagerequest);
+	public Page<ProductDTO> findAllPaged(Long categoryId, String name, PageRequest pagerequest) {
+		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getOne(categoryId)); //podia passar id mas aqui convem sempre instanciar o objeto primeiro
+		Page<Product> list = repository.find(categories, name, pagerequest);
 		
 		//no caso o page já é um stream entao ja nem precisamos chamar o stream e converter de novo no fim como no findall
 		return list.map(x -> new ProductDTO(x));

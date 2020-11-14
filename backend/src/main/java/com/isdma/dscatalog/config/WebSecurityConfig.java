@@ -29,6 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/actuator/**"); //ignora todos os endpoints para podermos fazer testes no postman sem sermos barrdos pelo spring security que configuramos
+	
+		//swagger
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", 
+				"/configuration/**", "/swagger-ui.html", "/webjars/**");
 	}
 
 	@Override

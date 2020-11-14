@@ -52,6 +52,8 @@ public class ProductResource {
 		//requestParam sao anotation para personalizarmos as requisições com muitas definições dadas pelo Spring
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(
+			@RequestParam(value = "categoryId", defaultValue = "0") Long categoryId,
+			@RequestParam(value = "name", defaultValue = "") String name,
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
@@ -61,7 +63,9 @@ public class ProductResource {
 		//Declarar objeto especial do Spring e instancio com um metodo de builder delel com os parametros que queremos definidos acima
 		PageRequest pagerequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);		
 		
-		Page<ProductDTO> list = service.findAllPaged(pagerequest);
+		//name.trim para lhe tirar os espações em branco ociosos, à esquerda e direita s senao houver letras a seguir porque se meterem ele nao encontra nada 
+		
+		Page<ProductDTO> list = service.findAllPaged(categoryId, name.trim(), pagerequest);
 		
 		return ResponseEntity.ok(list);
 		

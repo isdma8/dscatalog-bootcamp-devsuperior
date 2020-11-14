@@ -1,62 +1,25 @@
 import { makePrivateRequest } from 'core/utils/request';
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import BaseForm from '../../BaseForm';
 import './styles.scss';
 
 type FormState = {
     name: string;
     price: string;
-    category?: string;
+    //category?: string;
     description: string;
-
+    imageUrl: string;
 }
-
 
 const Form = () => {
 
-    const [formData, setFormData] = useState<FormState>({
-        name:'',
-        price:'',
-        category: '1',
-        description: ''
-    });//inicializo com um objeto vazio ja que este recebe um objeto quando tava useState({}) mas agora como tipei ele com FormState tenho de lhe passar os campos ou entao deixar em cima as propriedades opcionais com ?//podiamos fazer um a um mas assim podemos guardar todos os valores no formData
-    //const [price, setPrice] = useState('');
-    //const [category, setCategory] = useState('lime');
+    const { register, handleSubmit, errors } = useForm<FormState>()
 
-    type FormEvent=React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
+    const onSubmit = (data: FormState) => {
 
-    const handleOnChange = (event: FormEvent) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setFormData(data => ({
-            ...data, [name]: value    //para todos os dados do fomulario eu atribuo dinamicamente um nome e valor
-        }));
-    }
-    /*const handleOnChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPrice(event.target.value);
-    }
-    const handleOnChangeCategory = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setCategory(event.target.value);
-    }*/
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();//prevenir com que o submit nao tenha o comportamento padrao, ou seja a submição acontece mas não dá aquele efeito de recarregar pagina
-        
-        const payload = {
-            ...formData, //todos os dados que estao no formdata
-            imgUrl: 'https://media1.gamingreplay.com/162642-tm_thickbox_default/base-de-carregamento-para-dualsense-playstation-5-ps5.jpg',
-            categories: [{id: formData.category}] //temos de mandar so os ids e porque temos o categories como strings
-        }
-        
-        console.log(payload);
-        makePrivateRequest({url: '/products', method: 'POST', data: payload}).then(() => {
-            setFormData({name: '', category:'', price:'', description: ''}); //zerar form
+        makePrivateRequest({url: '/products', method: 'POST', data: data}).then(() => {
         });
-        /*const payload = {
-            name: productName,
-            price //no JS se o nome for igual ao nome da variavel que entra podemos omitir, no de cima coloquei para ver como fica no caso de serem diferentes
-        }*/
-        //console.log(formData);
     }
 
     //Gravar na BD
@@ -65,49 +28,77 @@ const Form = () => {
     return (
         //Aqui nos podiamos passar o children como tamos a passar p title, dava na mesma mas o mais comum é colocarmos o que quisermos dentro das tags   <BaseForm></BaseForm> e vai passar tudo la para dentro
         //crio uma row que por padrao já é display flex
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <BaseForm title="cadastrar um produto">
                 <div className="row">
                     <div className="col-6">
-                        <input 
-                            value={formData.name}//quem contra agora é o formData
-                            name='name'//precisamos deste campo para fazer o handleOnChange de todos os campos aos mesmo tempo do form
-                            type="text" 
-                            className="form-control mb-5" 
-                            onChange={handleOnChange}
-                            placeholder="Nome do produto"
-                        />
+                        <div className="margin-bottom-30">
+                            <input 
+                                ref={register({
+                                    required: "Campo obrigatório",
+                                    minLength: {value: 5, message: 'O campo deve ter no minimo 5 caracteres'},
+                                    maxLength: {value: 60, message: 'O campo deve ter no maximo 60 caracteres'}
 
-                        <select 
-                            value={formData.category}
-                            className="form-control mb-5" onChange={handleOnChange}
-                            name="category"
-                        >
-                            <option value="3">Computadores</option>
-                            <option value="1">Livros</option>
-                            <option value="2">Eletronicos</option>
-                        </select>
+                                })}
+                                name='name'//precisamos deste campo para fazer o handleOnChange de todos os campos aos mesmo tempo do form
+                                type="text" 
+                                className="form-control input-base" 
+                                placeholder="Nome do produto"
+                            />
+                            {errors.name && ( //como pode ter mais que um erro diferente nao escrevemos direto chamamos o errors.username.message
+                            <div className="invalid-feedback d-block">
+                                {errors.name.message} 
+                            </div>
+                            )}
+                        </div>
+                         <div className="margin-bottom-30">
+                            <input 
+                                ref={register({required: "Campo obrigatório"})}
+                                name="price"
+                                type="number" 
+                                className="form-control input-base" 
+                                placeholder="Preço"
 
-                        <input 
-                            value={formData.price}
-                            name="price"
-                            type="text" 
-                            className="form-control" 
-                            onChange={handleOnChange}
-                            placeholder="Preço"
-                        />
+                            />
+                            {errors.price && (
+                            <div className="invalid-feedback d-block">
+                                {errors.price.message} 
+                            </div>
+                            )}
+                        </div>              
+                        
+                        <div className="margin-bottom-30">
+                            <input 
+                                ref={register({required: "Campo obrigatório"})}
+                                name='imageUrl'//precisamos deste campo para fazer o handleOnChange de todos os campos aos mesmo tempo do form
+                                type="text" 
+                                className="form-control input-base" 
+                                placeholder="Imagem do produto"
+                            />
+                            {errors.imageUrl && (
+                            <div className="invalid-feedback d-block">
+                                {errors.imageUrl.message} 
+                            </div>
+                            )} 
+                        </div>                    
+                           
                     </div>
                     <div className="col-6">
                         <textarea 
+                            ref={register({required: "Campo obrigatório"})}
                             name="description" 
-                            value={formData.description}
-                            onChange={handleOnChange}
-                            className="form-control"
-                            cols={30} 
+                            className="form-control input-base"
+                            placeholder="Descrição"
+                            cols={30}   
                             rows={10} 
                             
                         
                         />
+                        {errors.description && (
+                            <div className="invalid-feedback d-block">
+                                {errors.description.message} 
+                            </div>
+                        )} 
 
                     </div>
                 </div>

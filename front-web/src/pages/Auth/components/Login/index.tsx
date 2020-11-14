@@ -8,7 +8,7 @@ import './styles.scss';
 import { makeLogin } from 'core/utils/request';
 import { saveSessionData } from 'core/utils/auth';
 
-type FormData = {
+type FormState = {
     username: string;
     password: string;
 }
@@ -20,7 +20,7 @@ type LocationState = {
 
 const Login = () => {
 
-    const { register, handleSubmit, errors } = useForm<FormData>();
+    const { register, handleSubmit, errors } = useForm<FormState>();
 
     const [hasError, setHasError] = useState(false);
 
@@ -30,7 +30,7 @@ const Login = () => {
 
     const { from } = location.state || { from: { pathname: "/admin" } }; //caso nao existe a rota para onde o user queria ir redireciono para admin
 
-    const onSubmit = (data: FormData) => {
+    const onSubmit = (data: FormState) => {
         console.log(data);
 
         makeLogin(data) //todos os pedidos tem um sucesso e caem no then e quando dao erro caem no catch
