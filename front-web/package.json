@@ -25,6 +25,7 @@
     "react-hook-form": "^6.10.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-toastify": "^6.1.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
