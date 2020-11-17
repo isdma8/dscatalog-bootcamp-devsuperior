@@ -23,9 +23,13 @@ const Form = () => {
 
         makePrivateRequest({url: '/products', method: 'POST', data: data})
         .then(() => {
-            toast.info('Produto Cadastrado com sucesso!');
+            toast.info('Produto salvo com sucesso!');
             history.push('/admin/products');
-        });
+        })
+        .catch( () => {
+
+            toast.error('Erro ao salvar produto!');
+        })
     }
 
     //Gravar na BD
