@@ -15,10 +15,14 @@ const List= () => {
         const history = useHistory();   
     
         useEffect(()=> {
+
+            
     
             const params = {
                 page: activePage,
-                linesPerPage: 4
+                linesPerPage: 4,
+                direction: 'DESC',
+                orderBy: 'id'
             }
     
             setIsLoading(true);
@@ -45,8 +49,10 @@ return (
             ADICIONAR
         </button>
         <div className="admin-list-container">
+            {console.log('OLHAA' + productsResponse)}
             {productsResponse?.content.map(product => (
                 <Card product={product} key={product.id}/>
+                 
             ))}
             {productsResponse && ( 
                 <Pagination 

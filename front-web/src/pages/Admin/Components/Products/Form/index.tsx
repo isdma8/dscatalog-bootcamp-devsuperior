@@ -1,7 +1,7 @@
-import { makePrivateRequest } from 'core/utils/request';
-import React from 'react';
+import { makePrivateRequest, makeRequest } from 'core/utils/request';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BaseForm from '../../BaseForm';
 import './styles.scss';
@@ -11,17 +11,44 @@ type FormState = {
     price: string;
     //category?: string;
     description: string;
-    imageUrl: string;
+    imgUrl: string;
+}
+
+type ParamsType = {
+    productId: string;
 }
 
 const Form = () => {
 
-    const { register, handleSubmit, errors } = useForm<FormState>()
+    const { register, handleSubmit, errors, setValue } = useForm<FormState>() //setValue para setar os valores dinamicamente do form
     const history = useHistory();
 
-    const onSubmit = (data: FormState) => {
+    const { productId } = useParams<ParamsType>(); //useparams conseguimos ir buscar o id à url definindo acima um ParamsType com o parametro de entrada com nome igualzinho ao que definimos na url :productId
 
-        makePrivateRequest({url: '/products', method: 'POST', data: data})
+    const isEditing = productId !== 'create';
+
+    useEffect(() => {
+        if(isEditing){
+            makeRequest({ url: `/products/${productId}` })
+            .then(response => {
+                setValue('name', response.data.name); //seguir exatamente nomes no formState
+                setValue('price', response.data.price);
+                setValue('description', response.data.description);
+                setValue('imgUrl', response.data.imgUrl);
+            }) 
+        }
+    }, [productId, isEditing, setValue]); // isEditing como esta dentro tem de ser aqui identificado tambem etc
+
+
+
+
+    const onSubmit = (data: FormState) => {
+        console.log(data);
+        makePrivateRequest({
+            url: isEditing ? `/products/${productId}` : '/products',  //editar ou criar
+            method: isEditing ? 'PUT' : 'POST', 
+            data: data
+        })
         .then(() => {
             toast.info('Produto salvo com sucesso!');
             history.push('/admin/products');
@@ -80,14 +107,14 @@ const Form = () => {
                         <div className="margin-bottom-30">
                             <input 
                                 ref={register({required: "Campo obrigatório"})}
-                                name='imageUrl'//precisamos deste campo para fazer o handleOnChange de todos os campos aos mesmo tempo do form
+                                name='imgUrl'//precisamos deste campo para fazer o handleOnChange de todos os campos aos mesmo tempo do form
                                 type="text" 
                                 className="form-control input-base" 
                                 placeholder="Imagem do produto"
                             />
-                            {errors.imageUrl && (
+                            {errors.imgUrl && (
                             <div className="invalid-feedback d-block">
-                                {errors.imageUrl.message} 
+                                {errors.imgUrl.message} 
                             </div>
                             )} 
                         </div>                    
