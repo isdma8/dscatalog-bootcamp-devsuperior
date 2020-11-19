@@ -27,6 +27,8 @@ const Form = () => {
 
     const isEditing = productId !== 'create';
 
+    const formTitle = isEditing ? 'Editar produto' : 'Cadastrar um produto';
+
     useEffect(() => {
         if(isEditing){
             makeRequest({ url: `/products/${productId}` })
@@ -66,7 +68,9 @@ const Form = () => {
         //Aqui nos podiamos passar o children como tamos a passar p title, dava na mesma mas o mais comum é colocarmos o que quisermos dentro das tags   <BaseForm></BaseForm> e vai passar tudo la para dentro
         //crio uma row que por padrao já é display flex
         <form onSubmit={handleSubmit(onSubmit)}>
-            <BaseForm title="cadastrar um produto">
+            <BaseForm 
+                title={formTitle}
+            >
                 <div className="row">
                     <div className="col-6">
                         <div className="margin-bottom-30">
