@@ -46,7 +46,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private JwtTokenEnhancer tokenEnhancer; //para adicionarmos coisas ao token injetamos a classe criada
+	private JwtTokenEnhancer tokenEnhancer; 
 	
 	
 	//Aqui temos os 4 beans que precisamos e que criamos na classe AppConfig e websecurityconfig
