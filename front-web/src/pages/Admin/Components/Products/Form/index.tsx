@@ -1,10 +1,12 @@
 import { makePrivateRequest, makeRequest } from 'core/utils/request';
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Select from 'react-select';  
 import BaseForm from '../../BaseForm';
 import './styles.scss';
+import { Category } from 'core/types/Product';
 
 type FormState = {
     name: string;
@@ -12,6 +14,7 @@ type FormState = {
     //category?: string;
     description: string;
     imgUrl: string;
+    categories: Category[];
 }
 
 type ParamsType = {
@@ -20,10 +23,14 @@ type ParamsType = {
 
 const Form = () => {
 
-    const { register, handleSubmit, errors, setValue } = useForm<FormState>() //setValue para setar os valores dinamicamente do form
+    const { register, handleSubmit, errors, setValue, control } = useForm<FormState>() //setValue para setar os valores dinamicamente do form, control é necessario para incorporar no select
     const history = useHistory();
 
     const { productId } = useParams<ParamsType>(); //useparams conseguimos ir buscar o id à url definindo acima um ParamsType com o parametro de entrada com nome igualzinho ao que definimos na url :productId
+
+    const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+
+    const [categories, setCategories] = useState<Category[]>([]); //useState da nossa lista de categorias
 
     const isEditing = productId !== 'create';
 
@@ -37,12 +44,18 @@ const Form = () => {
                 setValue('price', response.data.price);
                 setValue('description', response.data.description);
                 setValue('imgUrl', response.data.imgUrl);
+                setValue('categories', response.data.categories);
             }) 
         }
     }, [productId, isEditing, setValue]); // isEditing como esta dentro tem de ser aqui identificado tambem etc
 
-
-
+//Podemos ter um useEffect para cada problema especifico que tenhamos, é como quisermos
+    useEffect(() => {
+        setIsLoadingCategories(true);
+        makeRequest({url: '/categories'})
+        .then(response => setCategories(response.data.content)) //é uma lista paginada entao temos de ir buscar o contente dentro de data
+        .finally(() => setIsLoadingCategories(false))
+    }, []); 
 
     const onSubmit = (data: FormState) => {
         console.log(data);
@@ -89,6 +102,26 @@ const Form = () => {
                             {errors.name && ( //como pode ter mais que um erro diferente nao escrevemos direto chamamos o errors.username.message
                             <div className="invalid-feedback d-block">
                                 {errors.name.message} 
+                            </div>
+                            )}
+                        </div>
+                        <div className="margin-bottom-30">
+                            <Controller //para o select assumir o select que tem dentro temos de chamar o controller e depois renderizamos la dentro o componente Select com o as
+                                as={Select}
+                                name="categories" //mesmo nome que temos no backend para dpeois poder cadastar
+                                rules={{required:true}} //onde colocamos as validações tal como em cima
+                                control={control}
+                                isLoading={isLoadingCategories} //tambem tenho aqui opção de definir um isLoading
+                                options={categories}
+                                getOptionLabel={(option: Category) => option.name} //valor a mostrar no select 
+                                getOptionValue={(option: Category) => String(option.id)} //valor enviado para a API na criação do produto
+                                classNamePrefix = "categories-select"
+                                placeholder="Categorias"
+                                isMulti
+                            />
+                            {errors.categories && (
+                            <div className="invalid-feedback d-block">
+                                Campo obrigatório 
                             </div>
                             )}
                         </div>

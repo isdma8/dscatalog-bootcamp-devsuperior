@@ -1,0 +1,13 @@
+.categories-select__control{//vamos buscar estes styles direto no chrome em inspecionar, os prefixos foram dados por nos mas o resto do nome é junto com o criado pelo desenvolvedor da biblioteca
+    height: 50px;
+    border-radius: 10px !important; //porque a biblioteca do select ja tinha um border-radius entao usamos isto para sobrepor o deles senao nao fica
+    border: 1px solid #E1E1E1;
+}
+
+.categories-select__indicator-separator{ //para nao mostrar a linha que trazia no select por defeito
+    display: none;
+}
+
+.categories-select__placeholder{
+    color: #9E9E9E;
+}

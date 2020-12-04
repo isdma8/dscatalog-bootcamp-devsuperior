@@ -98,6 +98,11 @@ public class ProductService {
 		
 		//Como é igual no insert e no update vamos fazer um metodo auxiliar que faz o mesmo transformar o ProductDTO no product
 		copyDtoToEntity(dto, entity);
+		
+		/*if(entity.getCategories().size() == 0) { //adicionar uma cat para ter pelo menos uma senao da erro enquanto nao é corrigido no frontend
+			Category cat = categoryRepository.getOne(1L);
+			entity.getCategories().add(cat);
+		}*/
 
 		entity = repository.save(entity); // retorna o cat inserido, neste caso muda que fica ja com id
 
