@@ -15,7 +15,8 @@ type LoginData = {
     password: string;
 }
 
-const BASE_URL = 'http://localhost:3000'; //ja nao preciso usar o proxy, podia colocar aqui direto o link do backend porque ja configurei o CORS no backend qu resolve esse problema
+const BASE_URL = process.env.REACT_APP_BACKEND_URL ?? 'http://localhost:3000'; //ja nao preciso usar o proxy, podia colocar aqui direto o link do backend porque ja configurei o CORS no backend qu resolve esse problema
+//é um if se o REACT_APP_BACKEND_URL estiver deifinido usa essa variavel senao usa o localhost ou seja ainda não esta em produção
 
 // Add a response interceptor
 axios.interceptors.response.use(function (response) { //intercepta as requisições e se der erro que nos especificarmos fazemos o que quisermos
