@@ -12,7 +12,7 @@ const ButtonIcon = ({ text }:Props)=> (
                 <h5>{ text }</h5>
         </button>
         <div className="btn-icon-content">
-            <ArrowIcon />
+            <ArrowIcon data-testid = "arrow-icon" />
         </div>
     </div>
 
