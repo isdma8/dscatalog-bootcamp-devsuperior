@@ -96,4 +96,11 @@ test('should trigger onChange action', () => {
     expect(onChange).toHaveBeenCalled();//verificar apenas se foi ou nao chamada
     expect(onChange).toHaveBeenCalledWith(0); //espero que a função tenha sido chamada com o valor 0 que corresponde ao clicar na pagina 1
 
+
+    userEvent.click(previousElement);
+    expect(onChange).toHaveBeenCalledWith(0);
+
+    userEvent.click(nextElement);
+    expect(onChange).toHaveBeenCalledWith(2);
+
 });
