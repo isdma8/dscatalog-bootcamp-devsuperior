@@ -18,6 +18,8 @@
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
     "jwt-decode": "^3.0.0",
+    "msw": "^0.24.1",
+    "mutationobserver-shim": "^0.3.7",
     "node-sass": "^4.14.1",
     "qs": "^6.9.4",
     "react": "^16.13.1",
@@ -33,7 +35,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --testPathIgnorePatterns='fixtures.ts'",
     "test:watch": "react-scripts test",
     "eject": "react-scripts eject"
   },

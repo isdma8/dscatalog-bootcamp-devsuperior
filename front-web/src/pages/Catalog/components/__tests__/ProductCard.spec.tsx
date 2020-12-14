@@ -1,8 +1,6 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
 import ProductCard from '../ProductCard';
-import { Router } from 'react-router-dom';
-import history from 'core/utils/history';
 import { Product } from 'core/types/Product';
 
 test('should render ProductCard', () => {
