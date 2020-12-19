@@ -8,11 +8,11 @@ const ProductCardLoader = () => {
 
     //const loaderItems = [0, 1, 2, 4];
     const loaderItems = generateList(4);
-
+    // gera os contentloader, tantos quanto o tamanho da lista que criamos
     return (
         <>
             {   
-                loaderItems.map(item => (//gera os contentloader, tantos quanto o tamanho da lista que criamos
+                loaderItems.map(item => (
 
                     <ContentLoader
                         key={item} //temos de passar sempr eum key nos map

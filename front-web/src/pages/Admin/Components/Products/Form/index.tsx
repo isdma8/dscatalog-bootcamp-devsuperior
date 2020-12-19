@@ -77,9 +77,9 @@ const Form = () => {
     //Gravar na BD
 
 
+    //Aqui nos podiamos passar o children como tamos a passar p title, dava na mesma mas o mais comum é colocarmos o que quisermos dentro das tags   <BaseForm></BaseForm> e vai passar tudo la para dentro
+    //crio uma row que por padrao já é display flex
     return (
-        //Aqui nos podiamos passar o children como tamos a passar p title, dava na mesma mas o mais comum é colocarmos o que quisermos dentro das tags   <BaseForm></BaseForm> e vai passar tudo la para dentro
-        //crio uma row que por padrao já é display flex
         <form onSubmit={handleSubmit(onSubmit)}>
             <BaseForm 
                 title={formTitle}
@@ -99,7 +99,8 @@ const Form = () => {
                                 className="form-control input-base" 
                                 placeholder="Nome do produto"
                             />
-                            {errors.name && ( //como pode ter mais que um erro diferente nao escrevemos direto chamamos o errors.username.message
+                            {/* //como pode ter mais que um erro diferente nao escrevemos direto chamamos o errors.username.message */}
+                            {errors.name && (
                             <div className="invalid-feedback d-block">
                                 {errors.name.message} 
                             </div>

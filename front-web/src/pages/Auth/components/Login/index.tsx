@@ -68,7 +68,8 @@ const Login = () => {
                                 }
                             })}//forma de validar email tirada do react hook form
                         />
-                        {errors.username && ( //como pode ter mais que um erro diferente nao escrevemos direto chamamos o errors.username.message
+                        {/* //como pode ter mais que um erro diferente nao escrevemos direto chamamos o errors.username.message */}
+                        {errors.username && ( 
                             <div className="invalid-feedback d-block">
                                 {errors.username.message} 
                             </div>
