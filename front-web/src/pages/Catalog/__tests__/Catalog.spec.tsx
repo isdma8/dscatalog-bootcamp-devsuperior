@@ -23,7 +23,7 @@ const server = setupServer(
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
-test('should render ProductCard', async () => { //para ter o await precisamos do async, e precisamos do await porque queremos pegar o texto de uma operação assincrona, nos não sabemos quando ele fica disponivel porque ele é pedido a outro compomente ou bd etc
+test('should render Catalog', async () => { //para ter o await precisamos do async, e precisamos do await porque queremos pegar o texto de uma operação assincrona, nos não sabemos quando ele fica disponivel porque ele é pedido a outro compomente ou bd etc
 //e precisamos ainda instlaar o [yarn add mutationobserver-shim] porque usamos o react hook form e lá é dito que se não o fizermos isto não funciona com ele.
 //e no setupTests.ts colocar import 'mutationobserver-shim';
 

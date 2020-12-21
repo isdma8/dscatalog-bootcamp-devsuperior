@@ -63,8 +63,8 @@ const Catalog = () => {
     </h1>
 
     <div className="catalog-products">
-        {isLoading ? <ProductCardLoader /> : ( //caso isloading chamamos o loader caso nao chamamos os dados
-            productsResponse?.content.map(product => ( //iteração sobre elementos usando o map
+        {isLoading ? <ProductCardLoader /> : (
+            productsResponse?.content.map(product => (
                 <Link to={`/products/${product.id}`} key={product.id}>
                     <ProductCard product={product}/></Link>
                 ))

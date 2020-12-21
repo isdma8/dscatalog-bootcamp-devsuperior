@@ -7,9 +7,11 @@ import ProductDetails from './pages/Catalog/components/ProductDetails';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 import history from './core/utils/history';
-                                                //importamos tmabem o route é onde definimos de facto a url de cada rota
+
+//importamos tmabem o route é onde definimos de facto a url de cada rota
+//<BrowserRouter> Agora iremos gerenciar nos com o Router chamando o history que criamos, assim ja podemos fazer redirecionamentos em arquivos ts e nao so em componentes, e nos ts eu nao posso usar os react hooks
 const Routes = () => (
-        //<BrowserRouter> Agora iremos gerenciar nos com o Router chamando o history que criamos, assim ja podemos fazer redirecionamentos em arquivos ts e nao so em componentes, e nos ts eu nao posso usar os react hooks
+        
         <Router history={history}> 
             <Navbar />
             <Switch>
