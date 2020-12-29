@@ -40,9 +40,9 @@ describe('Tests with price greather than zero', () => { //Suite de testes, nada 
 });
 
 
+describe('Tests with price greather than zero', () => {
+    it('Tests with price lower or equal than zero', () => { //test ou it dá igual
 
-it('Tests with price lower or equal than zero', () => { //test ou it dá igual
-    describe('Tests with price greather than zero', () => {
         //ARRANGE
         const price = 0;
         //ACT
@@ -54,7 +54,7 @@ it('Tests with price lower or equal than zero', () => { //test ou it dá igual
         const priceElement = screen.getByText('0.00');
         
         expect(priceElement).toBeInTheDocument();
-       });
+    });
 
 });
 

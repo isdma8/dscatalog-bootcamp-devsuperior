@@ -27,7 +27,7 @@
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.10.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "4.0.1",
     "react-select": "^3.1.1",
     "react-select-event": "^5.1.0",
     "react-toastify": "^6.1.0",
@@ -37,6 +37,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false --testPathIgnorePatterns='fixtures.ts'",
+    "test:coverage": "react-scripts test --watchAll=false --testPathIgnorePatterns='fixtures.ts' --coverage",
     "test:watch": "react-scripts test --testPathIgnorePatterns='fixtures.ts'",
     "eject": "react-scripts eject"
   },
