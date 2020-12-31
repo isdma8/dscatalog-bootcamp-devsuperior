@@ -12,7 +12,7 @@ before_deploy:
 deploy:
   provider: script
   script:
-    docker tag dscatalog:latest $DOCKERHUB_USER/dscatalog:latest;
+    docker tag dscatalog:v3 $DOCKERHUB_USER/dscatalog:v3;
     docker push $DOCKERHUB_USER/dscatalog;
   on:
     branch: main
