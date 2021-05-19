@@ -24,7 +24,7 @@ public class UserDTO implements Serializable{
 	//private String password; Nao queremos a passaword a transitar
 	
 	public UserDTO() {
-		
+		 
 	}
 	
 	Set<RoleDTO> roles = new HashSet<>();

@@ -48,7 +48,7 @@ public class ProductDTO implements Serializable{
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
-		this.date = date;
+		this.date = date; 
 	}
 	
 	public ProductDTO(Product entity) {

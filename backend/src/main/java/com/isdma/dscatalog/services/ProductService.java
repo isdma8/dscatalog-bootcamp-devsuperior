@@ -56,7 +56,7 @@ public class ProductService {
 
 	//}
 	
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = true) 
 	public Page<ProductDTO> findAllPaged(Long categoryId, String name, PageRequest pagerequest) {
 		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getOne(categoryId)); //podia passar id mas aqui convem sempre instanciar o objeto primeiro
 		Page<Product> list = repository.find(categories, name, pagerequest);

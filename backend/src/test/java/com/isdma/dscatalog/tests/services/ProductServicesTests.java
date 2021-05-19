@@ -3,20 +3,24 @@ package com.isdma.dscatalog.tests.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.isdma.dscatalog.dto.ProductDTO;
 import com.isdma.dscatalog.entities.Product;
 import com.isdma.dscatalog.repositories.ProductRepository;
 import com.isdma.dscatalog.services.ProductService;
@@ -59,10 +63,65 @@ public class ProductServicesTests {
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product)); //Optional.of com isto podemos criar uma instancia do optional //usamos o when quando sabemos que vamos ter retorno da chamada e depois especificamos o resultado, o meu repository mocado vai ter de retornar um optional com um produto la dentro neste caso
 		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());//intanciar optional vazio que é o que deve retornar quando nao existe o id
 		
+		Mockito.when(repository.getOne(existingId)).thenReturn(product);
+		Mockito.doThrow(EntityNotFoundException.class).when(repository).getOne(nonExistingId);
+		
 		Mockito.doNothing().when(repository).deleteById(existingId); //donothing é para os casos que sabemos que nao retorna nada
 		Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
 		Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
 	}
+	
+	@Test
+	public void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() { //este test nem era preciso porque neste momento nenhuma classe depende de produto mas imaginemos que no futuro queremos evoluir o nosso modelo de dominio e ter por exemplo item de produto, entao ja ficaria aqui o test para validar isso
+		ProductDTO dto = new ProductDTO(); //podia usar fabrica
+		
+		Assertions.assertThrows(ResourceNotFoundException.class, () -> { 
+			service.update(nonExistingId, dto);
+		});
+		
+	}
+	
+	@Test
+	public void updateShouldReturnProductDTOWhenIdExists() {
+		ProductDTO dto = new ProductDTO();
+		ProductDTO result = service.update(existingId, dto);
+		
+		Assertions.assertNotNull(result);
+	}
+	
+	
+	@Test
+	public void findByIdShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() { //este test nem era preciso porque neste momento nenhuma classe depende de produto mas imaginemos que no futuro queremos evoluir o nosso modelo de dominio e ter por exemplo item de produto, entao ja ficaria aqui o test para validar isso
+		
+		
+		Assertions.assertThrows(ResourceNotFoundException.class, () -> { 
+			service.findById(nonExistingId);
+		});
+		
+	}
+	
+	@Test
+	public void findByIdShouldReturnProductDTOWhenIdExists() {
+		ProductDTO result = service.findById(existingId);
+		
+		Assertions.assertNotNull(result);
+	}
+	
+	@Test
+	public void findAllPagedShouldReturnPage() {
+		
+		Long categoryId = 0L;
+		String name = "";
+		PageRequest pageRequest = PageRequest.of(0, 10);
+		
+		Page<ProductDTO> result = service.findAllPaged(categoryId, name, pageRequest);
+		
+		Assertions.assertNotNull(result);
+		Assertions.assertFalse(result.isEmpty());
+		Mockito.verify(repository, Mockito.times(1)).find(null, name, pageRequest);
+		
+	}
+	
 	
 	@Test
 	public void deleteShouldThrowDatabaseExceptionWhenDependentId() { //este test nem era preciso porque neste momento nenhuma classe depende de produto mas imaginemos que no futuro queremos evoluir o nosso modelo de dominio e ter por exemplo item de produto, entao ja ficaria aqui o test para validar isso
