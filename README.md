@@ -2,7 +2,7 @@
 
 # Sobre o projeto
 
-DSCatalog é uma aplicação full stack web e mobile, construída durante o Bootcamp da DevSuperior. 
+DSCatalog é uma aplicação full stack web, construída durante o Bootcamp da DevSuperior tendo sido implementado o Backend e Frontend de um catálogo de produtos. 
 
 A aplicação consiste num catálogo de produtos, no qual o utilizador se pode registar e aceder assim à listagem de produtos, detalhes de cada um, inserir e apagar produtos e as suas categorias.
 
