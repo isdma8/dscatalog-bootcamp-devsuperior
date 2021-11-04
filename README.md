@@ -22,13 +22,13 @@ A aplicação consiste num catálogo de produtos, no qual o utilizador se pode r
 
 
 ## Implantação em produção
-- Back end: Heroku
-- Front end web: Netlify 
+- Backend: Heroku
+- Frontend web: Netlify 
 - Banco de dados: Postgresql
 
 # Como executar o projeto
 
-## Back end
+## Backend
 Pré-requisitos: Java 11
 
 ```bash
@@ -42,7 +42,7 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-## Front end web 
+## Frontend web 
 Pré-requisitos: npm / yarn
 
 ```bash
