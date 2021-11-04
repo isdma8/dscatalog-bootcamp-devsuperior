@@ -8,12 +8,12 @@ A aplicação consiste num catálogo de produtos, no qual o utilizador se pode r
 
 
 # Tecnologias utilizadas
-## Back end
+## Backend
 - Java
 - Spring Boot
 - JPA / Hibernate
 - Maven
-## Front end *
+## Frontend
 - HTML / CSS / JS / TypeScript
 - ReactJS
 - React Native
